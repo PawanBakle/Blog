@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path,include
 from django.http import HttpResponse
+from django.conf import settings
+from django.conf.urls.static import static
 from userPage import views as user_view
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,3 +29,6 @@ urlpatterns = [
     path('profile/', user_view.profile, name="profile"),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
