@@ -1,0 +1,42 @@
+Index: userPage/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/userPage/views.py b/userPage/views.py
+--- a/userPage/views.py	(date 1697136096485)
++++ b/userPage/views.py	(date 1697136096485)
+@@ -1,6 +1,6 @@
+ from django.shortcuts import render,redirect
+ from .forms import UserRegisterForm
+-from django.contrib import messages
++from django.views.decorators.csrf import csrf_exempt
+ from django.http import HttpResponse
+ from django.contrib.auth import authenticate, login, logout
+ def register(request):
+@@ -9,7 +9,7 @@
+         form = UserRegisterForm(request.POST)
+         if form.is_valid():
+             form.save()
+-            return redirect("userPage/SignIn.html")
++
+     else:
+         form = UserRegisterForm()
+     return render(request,'userPage/register.html', {'form':form})
+@@ -18,10 +18,10 @@
+ 
+ def sign_in(request):
+     if request.method == "POST":
+-        username = request.POST("username")
+-        password = request.POST("password")
+-        user = authenticate(request,username="username",password="password")
++        username = request.POST["username"]
++        password = request.POST["password"]
++        user = authenticate(request,username=username,password=password)
+         login(request,user)
+         return redirect("feed/main.html")
+-    else:
+-        return HttpResponse("Invalid Credentials")
+\ No newline at end of file
++
++    return render(request,'userPage/SignIn.html')
