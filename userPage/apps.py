@@ -6,5 +6,4 @@ class UserpageConfig(AppConfig):
     name = 'userPage'
 
     def ready(self):
-        import userPage\
-            .signals
+        import userPage.signals
