@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
-# Create your views here.
+from .models import Posts
+from .forms import NewPost
+from django.contrib.auth.admin import User
+
 posts = [
    {
       'author':'Delulu,',
@@ -16,10 +19,25 @@ posts = [
    }
 ]
 def home(request):
-   title = "Gladiator"
-   context = {'title' : title,'post' :posts}
+   posts = Posts.objects.all()
+   context = {'post' :posts}
    return render(request,'feed/main.html',context)
 def about(request):
 
 
    return render(request,'feed/page.html')
+
+
+def new_posts(request,pk):
+
+   if request.method == 'POST':
+
+      post_form  = NewPost(request.POST)
+      if post_form.is_valid():
+         post_form.save()
+         return redirect('/')
+   else:
+      post_form = NewPost(request.POST, instance=request.user)
+
+   context = {'post_form':post_form}
+   return render(request,'feed/add_post.html',context)

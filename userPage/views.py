@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .models import *
 def register(request):
 
     if request.method == 'POST':
@@ -32,9 +33,12 @@ def profile(request):
 def sign_out(request):
     logout(request)
     return redirect('login')
-def Profile(request):
+def Profile(request, pk):
+    user = User.objects.get(id=pk)
+    post = user.objects.get(filter = 'title')
+    posts = user.objects.get(filter='content')
     if request.method == 'POST':
-        uform =  UserUpdateForm(request.POST,instance=request.user)
+        uform = UserUpdateForm(request.POST,instance=request.user)
         pform = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
         if uform.is_valid() and pform.is_valid():
             uform.save()
@@ -43,5 +47,5 @@ def Profile(request):
     else:
         uform = UserUpdateForm(instance=request.user)
 
-    context = {'u_form':uform}
+    context = {'u_form':uform,'user':user,'post':post,'content':posts}
     return render(request,'userPage/Profile.html',context)

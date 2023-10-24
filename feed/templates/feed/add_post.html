@@ -5,6 +5,15 @@
     <title>Post</title>
 </head>
 <body>
+<form method="POST" action="">
+    {% csrf_token %}
+    <legend><h2>Author :{{ user.username }}</h2>
+        <p>Title : {{ post_form.title }}</p></legend>
 
+        <p>{{ post_form.content }}</p>
+		<div class="d-flex justify-content-center mt-3 login_container">
+				 				<input class="btn login_btn" type="submit" value="Add">
+        </div>
+            	</form>
 </body>
 </html>
