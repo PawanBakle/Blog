@@ -33,10 +33,9 @@ def profile(request):
 def sign_out(request):
     logout(request)
     return redirect('login')
-def Profile(request, pk):
-    user = User.objects.get(id=pk)
-    post = user.objects.get(filter = 'title')
-    posts = user.objects.get(filter='content')
+def Profile(request):
+
+
     if request.method == 'POST':
         uform = UserUpdateForm(request.POST,instance=request.user)
         pform = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
@@ -47,5 +46,5 @@ def Profile(request, pk):
     else:
         uform = UserUpdateForm(instance=request.user)
 
-    context = {'u_form':uform,'user':user,'post':post,'content':posts}
+    context = {'u_form':uform}
     return render(request,'userPage/Profile.html',context)
