@@ -6,9 +6,8 @@
           <div class="media-body">
             <div class="article-metadata">
               <a class="mr-2" href="#">{{ i.author }}</a>
-              <small class="text-muted">{{ i.content }}</small>
             </div>
-            <h2> <a class="nav-item nav-link"  href="{% url 'profile'">{{ i.title }}</a></h2>
+            <h2> <a class="nav-item nav-link"  href="{% url 'details' details.id">{{ i.title }}</a></h2>
             <p class="article-content">{{ i.content }}</p>
           </div>
         </article>

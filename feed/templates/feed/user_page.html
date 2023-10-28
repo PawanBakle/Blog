@@ -1,0 +1,11 @@
+{% extends "feed/base.html" %}
+{% block content %}
+ <h1>Your Posts</h1>
+
+        <article class="media content-section">
+          <div class="media-body">
+            <h2><a class="article-title" href="{% url 'details' post_detail.id %}">{{user_post.title}}</a></h2>
+            <p class="article-content">{{ user_post.content }}</p>
+          </div>
+        </article>
+{% endblock content %}

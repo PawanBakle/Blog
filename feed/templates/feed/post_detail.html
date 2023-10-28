@@ -7,7 +7,7 @@
             <div class="article-metadata">
               <small class="text-muted">{{ post_detail.content }}</small>
             </div>
-            <h2><a class="article-title" href="{% url 'detail' user_post.id %}">{{user_post.title}}</a></h2>
+            <h2><a class="article-title" href="{% url 'details' post_detail.id %}">{{post_detail.title}}</a></h2>
             <p class="article-content">{{ post_detail.content }}</p>
           </div>
         </article>

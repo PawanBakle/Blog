@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Posts
+from feed import models
 from .forms import NewPost
 from django.contrib.auth.admin import User
 
@@ -22,6 +23,7 @@ posts = [
 
 def home(request):
     posts = Posts.objects.all()
+
 
     context = {'post': posts}
     return render(request, 'feed/main.html', context)
