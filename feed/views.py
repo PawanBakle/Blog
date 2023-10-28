@@ -5,26 +5,8 @@ from feed import models
 from .forms import NewPost
 from django.contrib.auth.admin import User
 
-posts = [
-    {
-        'author': 'Delulu,',
-        'title': 'Postday',
-        'date': '28-12-2022',
-        'content': "A day in a life of "
-    },
-    {
-        'author': 'Lalalla,',
-        'title': 'Moderism',
-        'date': '09-7-2021',
-        'content': "A film based on Art "
-    }
-]
-
-
 def home(request):
     posts = Posts.objects.all()
-
-
     context = {'post': posts}
     return render(request, 'feed/main.html', context)
 
@@ -35,10 +17,11 @@ def about(request):
 
 def new_posts(request):
     if request.method == 'POST':
-
         post_form = NewPost(request.POST)
         if post_form.is_valid():
-            post_form.save()
+            new_blog = post_form.save(commit=False)
+            new_blog.author = request.user  # Assign the currently logged-in user as the author
+            new_blog.save()
             return redirect('/')
     else:
         post_form = NewPost(request.POST, instance=request.user)
