@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Posts
 from feed import models
-from .forms import NewPost
+from .forms import NewPost,Post_edit
 from django.contrib.auth.admin import User
 
 def home(request):
@@ -33,3 +33,25 @@ def new_posts(request):
 def post_detail(request, pk):
     user_post = Posts.objects.get(id=pk)
     return render(request, 'feed/post_detail.html', context={"post_detail": user_post})
+
+
+def post_edit(request, pk):
+    post = Posts.objects.get(id=pk)
+    if request.method == 'POST':
+        edit = Post_edit(request.POST)
+        if edit.is_valid():
+            edit.save()
+            return redirect('details',pk = post.id)
+    else:
+        edit = Post_edit(request.POST,instance=post)
+    return render(request, 'feed/post_edit.html', context={"post":post,"post_edit": edit})
+
+def post_delete(request, pk):
+    post = Posts.objects.get(id=pk)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('/')
+    context = {
+        'post': post
+    }
+    return render(request, 'feed/post_delete.html', context)
