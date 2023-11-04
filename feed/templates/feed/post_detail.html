@@ -6,6 +6,7 @@
           <div class="media-body">
             <div class="article-metadata">
             </div>
+               {% if post_detail.author == request.user %}
               <hr>
               <div align="right"  class="col-md-8">
                   <span ><a  class="btn btn-danger float-right btn-sm"
@@ -13,6 +14,7 @@
                             <span><a class="btn btn-primary mx-2 float-right btn-sm"
                                     href="{% url 'edit' post_detail.id %}">Edit</a></span>
           </div>
+              {% endif %}
             <h2><a class="article-title" href="{% url 'details' post_detail.id %}">{{post_detail.title}}</a></h2>
             <p class="article-content">{{ post_detail.content }}</p>
           </div>

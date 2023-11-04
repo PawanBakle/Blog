@@ -11,4 +11,4 @@ class NewPost(forms.ModelForm):
 class Post_edit(forms.ModelForm):
     class Meta:
         model = Posts
-        fields = ['title','content']
+        fields = ('title','content')

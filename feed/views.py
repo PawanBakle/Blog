@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Posts
 from feed import models
 from .forms import NewPost,Post_edit
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.admin import User
 
 def home(request):
@@ -34,11 +35,11 @@ def post_detail(request, pk):
     user_post = Posts.objects.get(id=pk)
     return render(request, 'feed/post_detail.html', context={"post_detail": user_post})
 
-
+@login_required
 def post_edit(request, pk):
     post = Posts.objects.get(id=pk)
     if request.method == 'POST':
-        edit = Post_edit(request.POST)
+        edit = Post_edit(request.POST,instance=post)
         if edit.is_valid():
             edit.save()
             return redirect('details',pk = post.id)
