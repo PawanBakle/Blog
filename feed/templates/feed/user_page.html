@@ -4,8 +4,9 @@
 
         <article class="media content-section">
           <div class="media-body">
-            <h2><a class="article-title" href="{% url 'details' post_detail.id %}">{{user_post.title}}</a></h2>
-            <p class="article-content">{{ user_post.content }}</p>
+            {% for i in post %}
+            <h2><a class="article-title" href="{% url 'userpage' post_detail.id %}">{{i.title}}</a></h2>
+            <p class="article-content">{{ i.content }}</p>
           </div>
         </article>
 {% endblock content %}

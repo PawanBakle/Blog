@@ -16,6 +16,7 @@ def about(request):
     return render(request, 'feed/page.html')
 
 
+@login_required
 def new_posts(request):
     if request.method == 'POST':
         post_form = NewPost(request.POST)
@@ -37,14 +38,14 @@ def post_detail(request, pk):
 
 @login_required
 def post_edit(request, pk):
-    post = Posts.objects.get(id=pk)
+    post = Posts.objects.get(id = pk)
     if request.method == 'POST':
-        edit = Post_edit(request.POST,instance=post)
+        edit = NewPost(request.POST,instance=post)
         if edit.is_valid():
             edit.save()
             return redirect('details',pk = post.id)
     else:
-        edit = Post_edit(request.POST,instance=post)
+        edit = NewPost(instance=post)
     return render(request, 'feed/post_edit.html', context={"post":post,"post_edit": edit})
 
 def post_delete(request, pk):
@@ -56,3 +57,6 @@ def post_delete(request, pk):
         'post': post
     }
     return render(request, 'feed/post_delete.html', context)
+def my_posts(request):
+    post = Posts.objects.filter(request.user)
+    return render(request,'feed/post_delete.html')

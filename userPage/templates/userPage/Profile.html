@@ -23,11 +23,16 @@
           </div>
       </form>
     </div>
+ 
  <h1>Your Posts</h1>
-
+{% for i in my_post  %}
         <article class="media content-section">
           <div class="media-body">
+            <a class="nav-item nav-link"  href="{% url 'details' i.id %}"> {{ i.title }}</a>
+            <hr>
+            {{ i.content }}
           </div>
         </article>
+      {% endfor %}
     </html>
 {% endblock content %}

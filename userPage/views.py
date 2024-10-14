@@ -30,13 +30,16 @@ def sign_in(request):
         return redirect('/')
 
     return render(request,'userPage/SignIn.html')
-@login_required
-def profile(request):
-    return render(request,'userPage/profile.html')
+
+
 def sign_out(request):
     logout(request)
     return redirect('login')
-def Profile(request):
+def profile(request):
+    # my_post = Posts.objects.filter(request.user)
+    # In your view
+    user_profile = Profile.objects.get(user=request.user)
+    user_posts = Posts.objects.filter(author=user_profile.user)
 
     if request.method == 'POST':
         uform = UserUpdateForm(request.POST,instance=request.user)
@@ -48,5 +51,5 @@ def Profile(request):
     else:
         uform = UserUpdateForm(instance=request.user)
 
-    context = {'u_form':uform,}
+    context = {'u_form':uform,'my_post':user_posts}
     return render(request,'userPage/Profile.html',context)
