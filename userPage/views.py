@@ -39,7 +39,8 @@ def profile(request):
     # my_post = Posts.objects.filter(request.user)
     # In your view
     user_profile = Profile.objects.get(user=request.user)
-    user_posts = Posts.objects.filter(author=user_profile.user)
+    user_post = Posts.objects.filter(author=user_profile.user)
+
 
     if request.method == 'POST':
         uform = UserUpdateForm(request.POST,instance=request.user)
@@ -51,5 +52,5 @@ def profile(request):
     else:
         uform = UserUpdateForm(instance=request.user)
 
-    context = {'u_form':uform,'my_post':user_posts}
+    context = {'u_form':uform,'my_post':user_post}
     return render(request,'userPage/Profile.html',context)
