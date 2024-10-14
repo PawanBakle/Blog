@@ -1,0 +1,1 @@
+A lightweight blog website built with Django, offering a user-friendly platform for creating, editing, and sharing blog posts. Features include user authentication, commenting, and a responsive design for an optimal viewing experience
