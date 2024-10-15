@@ -1,14 +1,16 @@
 {% extends "feed/base.html" %}
 {% block content %}
- <h1>Top Posts</h1>
+ <h3 style="font-weight: 400;">Top Posts</h3>
+ <br>
 {% for i in post %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ i.author.username }}</a>
+              <a style="text-decoration: none;" class="username" href="#">{{ i.author.username }}</a>
             </div>
-            <h2> <a class="nav-item nav-link"  href="{% url 'details' i.id %}">{{ i.title }}</a></h2>
+            <h2> <a class="nav-item nav-link" id="title" href="{% url 'details' i.id %}">{{ i.title }}</a></h2>
             <p class="article-content">{{ i.content }}</p>
+            <button class="comment">Comment</button>
           </div>
         </article>
 {% endfor %}
