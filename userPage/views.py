@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from .forms import UserRegisterForm, UserUpdateForm,ProfileUpdateForm
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from feed.models import *
@@ -35,12 +36,13 @@ def sign_in(request):
 def sign_out(request):
     logout(request)
     return redirect('login')
-def profile(request):
+def profile(request,pk):
     # my_post = Posts.objects.filter(request.user)
     # In your view
-    user_profile = Profile.objects.get(user=request.user)
-    user_post = Posts.objects.filter(author=user_profile.user)
-
+    # user_profile = Profile.objects.get(user=request.user)
+    # user_post = Posts.objects.filter(author=user_profile.user)
+    user = User.objects.get(id= pk)
+    post = Posts.objects.filter(author = user)
 
     if request.method == 'POST':
         uform = UserUpdateForm(request.POST,instance=request.user)
@@ -52,5 +54,5 @@ def profile(request):
     else:
         uform = UserUpdateForm(instance=request.user)
 
-    context = {'u_form':uform,'my_post':user_post}
+    context = {'u_form':uform,'my_post':post,'user': user}
     return render(request,'userPage/Profile.html',context)
