@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Posts
+from .models import Posts,Comments
 from feed import models
-from .forms import NewPost,Post_edit
+from django.contrib.auth.models import User
+from .forms import NewPost,Post_edit,Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.admin import User
 
@@ -34,7 +35,8 @@ def new_posts(request):
 
 def post_detail(request, pk):
     user_post = Posts.objects.get(id=pk)
-    return render(request, 'feed/post_detail.html', context={"post_detail": user_post})
+    user_comments = Comments.objects.filter(posts = user_post)
+    return render(request, 'feed/post_detail.html', context={"post_detail": user_post,'comments':user_comments})
 
 @login_required
 def post_edit(request, pk):
@@ -57,6 +59,23 @@ def post_delete(request, pk):
         'post': post
     }
     return render(request, 'feed/post_delete.html', context)
-def my_posts(request):
-    post = Posts.objects.filter(request.user)
-    return render(request,'feed/post_delete.html')
+def my_posts(request,username):
+    user = User.objects.get(username= username)
+    post = Posts.objects.filter(author = user)
+    return render(request,'feed/post_delete.html',{'posts': post, 'user': user})
+@login_required
+def add_comment(request,pk):
+    user_post = Posts.objects.get(id=pk)
+    if request.method == 'POST':
+        comment = Comment(request.POST)
+        if comment.is_valid():
+            
+            com = comment.save(commit=False)
+            com.u_name = request.user
+            com.posts = user_post
+            com.save()
+            return redirect('/')
+    else:
+        comment = Comment(request.POST)
+        
+    return render(request,'feed/comment.html',{'comment':comment})
