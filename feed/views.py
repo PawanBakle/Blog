@@ -34,9 +34,10 @@ def new_posts(request):
 
 
 def post_detail(request, pk):
+    posts = Posts.objects.all()
     user_post = Posts.objects.get(id=pk)
     user_comments = Comments.objects.filter(posts = user_post)
-    return render(request, 'feed/post_detail.html', context={"post_detail": user_post,'comments':user_comments})
+    return render(request, 'feed/post_detail.html', context={"user_post": user_post,'comments':user_comments,'post': posts})
 
 @login_required
 def post_edit(request, pk):

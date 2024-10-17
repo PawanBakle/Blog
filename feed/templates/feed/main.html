@@ -10,7 +10,7 @@
             </div>
             <h2> <a class="nav-item nav-link" id="title" href="{% url 'details' i.id %}">{{ i.title }}</a></h2>
             <p class="article-content">{{ i.content }}</p>
-            <button class="comment">Comment</button>
+            <button class="comment"> <a href="{% url 'comment' i.id %}" >Comment</a></button>
           </div>
         </article>
 {% endfor %}
