@@ -1,17 +1,58 @@
 {% extends "feed/base.html" %}
 {% block content %}
+<style>
+.tag{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 80px;
+
+  background-color: rgb(243, 139, 160);
+  /* opacity: 0.5; */
+  padding: 5px;
+  border-radius: 15px;
+
+}
+.postDetail{
+  display: flex;
+  justify-content: space-between;
+}
+
+</style>
  <h3 style="font-weight: 400;">Top Posts</h3>
  <br>
+
 {% for i in post %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
               <a style="text-decoration: none;" class="username" href="#">{{ i.author.username }}</a>
             </div>
-            <h2> <a class="nav-item nav-link" id="title" href="{% url 'details' i.id %}">{{ i.title }}</a></h2>
+            <div class="postDetail">
+              <h2> <a class="nav-item nav-link" id="title" href="{% url 'details' i.id %}">{{ i.title }}</a></h2>
+              {% if i.tag %}
+              <div class="tag"><h4 style="color: black; margin: 0; font-size: 20px;" >  {{ i.tag }}</h4></div>
+              {% endif %}
+            </div>
+
             <p class="article-content">{{ i.content }}</p>
             <button class="comment"> <a href="{% url 'comment' i.id %}" >Comment</a></button>
           </div>
+
         </article>
+
+        
+
 {% endfor %}
+<!-- <div class="content-section">
+  <h3>Filters</h3>
+
+    <ul class="list-group">
+      <li class="postDetail">{{ post.tag }}</li>
+
+    </ul>
+  
+  </p>
+</div> -->
 {% endblock content %}

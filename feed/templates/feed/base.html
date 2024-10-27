@@ -75,6 +75,22 @@
     </div>
     <div class="col-md-4">
       <div class="content-section">
+        <h3>Filter by</h3>
+  
+          <ul class="list-group">
+            <div>
+             
+              <a class="tag" href="{% url 'blog-home' %}">All</a><br>
+              <a class="tag" href="{% url 'blog-home' %}?tag=tech">Tech</a><br>
+              <a class="tag" href="{% url 'blog-home' %}?tag=news">News</a><br>
+              <a  class="tag" href="{% url 'blog-home' %}?tag=health">Health</a>
+            </div>
+  
+          </ul>
+        
+        </p>
+      </div>
+      <div class="content-section">
         <h3>Our Sidebar</h3>
         <p class='text-muted'>You can put any information here you'd like.
           <ul class="list-group">
@@ -85,8 +101,12 @@
           </ul>
         </p>
       </div>
+
+
     </div>
+
   </div>
+
 </main>
 
 

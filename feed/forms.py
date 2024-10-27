@@ -7,7 +7,7 @@ class NewPost(forms.ModelForm):
     class Meta:
         model=Posts
         author = User.username
-        fields= ['title','content']
+        fields= ['title','content','tag']
 
 class Post_edit(forms.ModelForm):
     class Meta:

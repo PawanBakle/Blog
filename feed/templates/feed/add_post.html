@@ -8,6 +8,7 @@
 <form method="POST" action="">
     {% csrf_token %}
     <legend><h2>Author :{{ user.username }}</h2>
+    <legend><h2>Post in :{{ post_form.tag }}</h2>
         <p>Title : {{ post_form.title }}</p></legend>
 
         <p>{{ post_form.content }}</p>

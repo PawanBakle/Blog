@@ -70,7 +70,10 @@ TEMPLATES = [
         },
     },
 ]
-
+GRAPH_MODELS = {
+  'app_labels': ["blog", "feed"],
+  'group_models': True,
+}
 WSGI_APPLICATION = 'blog.wsgi.application'
 
 
