@@ -8,7 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.admin import User
 
 def home(request):
-    posts = Posts.objects.all()
+    tag = request.GET.get('tag')
+    if tag:
+        posts = Posts.objects.filter(tag =tag )
+    else:
+
+        posts = Posts.objects.all()
     context = {'post': posts}
     return render(request, 'feed/main.html', context)
 
@@ -27,7 +32,7 @@ def new_posts(request):
             new_blog.save()
             return redirect('/')
     else:
-        post_form = NewPost(request.POST, instance=request.user)
+        post_form = NewPost()
 
     context = {'post_form': post_form}
     return render(request, 'feed/add_post.html', context)
@@ -35,8 +40,10 @@ def new_posts(request):
 
 def post_detail(request, pk):
     posts = Posts.objects.all()
+    # tags = Posts.objects.filter(tag)
     user_post = Posts.objects.get(id=pk)
     user_comments = Comments.objects.filter(posts = user_post)
+    # user_comment_name = Comments.objects.get(u_name)
     return render(request, 'feed/post_detail.html', context={"user_post": user_post,'comments':user_comments,'post': posts})
 
 @login_required
@@ -60,10 +67,16 @@ def post_delete(request, pk):
         'post': post
     }
     return render(request, 'feed/post_delete.html', context)
+
+
+
 def my_posts(request,username):
     user = User.objects.get(username= username)
     post = Posts.objects.filter(author = user)
     return render(request,'feed/post_delete.html',{'posts': post, 'user': user})
+
+
+
 @login_required
 def add_comment(request,pk):
     user_post = Posts.objects.get(id=pk)
