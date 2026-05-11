@@ -1,21 +1,48 @@
 {% extends "feed/base.html" %}
 
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
-                {{ form.as_p }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign Up</button>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="content-section">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">📝 Join Today</legend>
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text text-muted small">{{ field.help_text|safe }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Sign Up</button>
+                </div>
+            </form>
+            <div class="border-top pt-3 mt-3">
+                <small class="text-muted">
+                    Already Have An Account? <a href="{% url 'login' %}">Sign In</a>
+                </small>
             </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
-            </small>
         </div>
     </div>
+</div>
+
+<script>
+    // Add Bootstrap classes to all form inputs
+    document.querySelectorAll('input, select, textarea').forEach(input => {
+        input.classList.add('form-control');
+    });
+    // Special case: password fields get the same class
+    document.querySelectorAll('input[type="password"]').forEach(input => {
+        input.classList.add('form-control');
+    });
+</script>
 {% endblock content %}

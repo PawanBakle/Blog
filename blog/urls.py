@@ -23,9 +23,9 @@ from userPage import views as user_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('feed.urls')),
-    path('register/',user_view.register,name= "register-user"),
     path('sign_in/', user_view.sign_in, name="login"),
     path('sign_out/', user_view.sign_out, name="logout"),
+    path('register/', user_view.register, name="register-user"),
     path('profile/<int:pk>/', user_view.profile, name="profile"),
 
 ]

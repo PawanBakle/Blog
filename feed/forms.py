@@ -5,9 +5,13 @@ from .models import Posts,Comments
 from django.forms import ModelForm
 class NewPost(forms.ModelForm):
     class Meta:
-        model=Posts
-        author = User.username
-        fields= ['title','content','tag']
+        model = Posts
+        fields = ['title', 'content', 'tag']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'tag': forms.Select(attrs={'class': 'form-select'}),
+        }
 
 class Post_edit(forms.ModelForm):
     class Meta:

@@ -1,58 +1,32 @@
 {% extends "feed/base.html" %}
+
 {% block content %}
-<style>
-.tag{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 32px;
-  width: 80px;
-
-  background-color: rgb(243, 139, 160);
-  /* opacity: 0.5; */
-  padding: 5px;
-  border-radius: 15px;
-
-}
-.postDetail{
-  display: flex;
-  justify-content: space-between;
-}
-
-</style>
- <h3 style="font-weight: 400;">Top Posts</h3>
- <br>
-
-{% for i in post %}
+    {% for post in posts %}
         <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a style="text-decoration: none;" class="username" href="#">{{ i.author.username }}</a>
+            <div class="media-body">
+                <div class="article-metadata">
+                    <span>✍️ <a class="username" href="{% url 'my_posts' post.author.username %}">{{ post.author.username }}</a></span>
+                    {% if post.date_posted %}
+                        <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-between align-items-start flex-wrap">
+                    <h2 class="post-title">
+                        <a href="{% url 'details' post.id %}">{{ post.title }}</a>
+                    </h2>
+                    {% if post.tag %}
+                        <span class="tag-badge">{{ post.get_tag_display|default:post.tag }}</span>
+                    {% endif %}
+                </div>
+                <p class="article-content">{{ post.content|truncatewords:40 }}</p>
+                <div class="mt-2">
+                    <a href="{% url 'details' post.id %}" class="btn-comment">💬 Comment</a>
+                </div>
             </div>
-            <div class="postDetail">
-              <h2> <a class="nav-item nav-link" id="title" href="{% url 'details' i.id %}">{{ i.title }}</a></h2>
-              {% if i.tag %}
-              <div class="tag"><h4 style="color: black; margin: 0; font-size: 20px;" >  {{ i.tag }}</h4></div>
-              {% endif %}
-            </div>
-
-            <p class="article-content">{{ i.content }}</p>
-            <button class="comment"> <a href="{% url 'comment' i.id %}" >Comment</a></button>
-          </div>
-
         </article>
-
-        
-
-{% endfor %}
-<!-- <div class="content-section">
-  <h3>Filters</h3>
-
-    <ul class="list-group">
-      <li class="postDetail">{{ post.tag }}</li>
-
-    </ul>
-  
-  </p>
-</div> -->
+    {% empty %}
+        <div class="content-section text-center">
+            <p>No posts yet. Be the first to <a href="{% url 'new_posts' %}">create a post</a>!</p>
+        </div>
+    {% endfor %}
 {% endblock content %}
