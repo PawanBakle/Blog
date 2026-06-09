@@ -12,5 +12,5 @@ path('post_delete/<int:pk>/', views.post_delete,name ="delete"),
 path('user_page/', views.home,name ="userpage"),
 path('add_comment/<int:pk>/', views.add_comment,name ="comment"),
 path('home/tag/<str:tag>/', views.home_by_tag, name='home_by_tag'),
-path('third_party/', views.get_api, name='third_party'),
+
     ]

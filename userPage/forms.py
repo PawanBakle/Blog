@@ -37,7 +37,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['Img']  # capital I
+        fields = ['Img'] 
         widgets = {
             'Img': forms.FileInput(attrs={'class': 'form-control'})
         }

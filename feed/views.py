@@ -12,38 +12,31 @@ from .adapter import normalize_reqres,fetch_data
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Posts, Comments, UserData
 from .forms import NewPost, Comment
 from .adapter import normalize_reqres, fetch_data
 
-
-def get_api(request):
-    """Fetch and store external API data"""
-    data_fetch = fetch_data()
-    data = normalize_reqres(data_fetch)
-
-    # Only pass fields that exist in UserData model to avoid integrity errors
-    
-    allowed_fields = [f.name for f in UserData._meta.get_fields() if f.name != 'id']
-    filtered_data = {k: v for k, v in data.items() if k in allowed_fields}
-    
-    user_data = UserData.objects.create(**filtered_data)
-    all_data = UserData.objects.all()
-    print(all_data)
-    return render(request, 'feed/third_party.html', {'data': user_data})
-
+from django.core.paginator import Paginator
 
 def home(request):
-    posts = Posts.objects.all()
-    context = {'posts': posts}   
-    return render(request, 'feed/main.html', context)
-
+    # Single query with select_related to avoid N+1
+    posts_list = Posts.objects.select_related('author').all().order_by('-date_posted')
+    
+    # Pagination - 10 posts per page
+    paginator = Paginator(posts_list, 10)
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
+    
+    return render(request, 'feed/main.html', {'posts': posts})
 
 def home_by_tag(request, tag):
-    """Filter posts by tag"""
-    posts = Posts.objects.filter(tag=tag)
+    posts_list = Posts.objects.select_related('author').filter(tag=tag).order_by('-date_posted')
+    paginator = Paginator(posts_list, 10)
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
     return render(request, 'feed/main.html', {'posts': posts})
 
 
@@ -68,15 +61,25 @@ def new_posts(request):
     return render(request, 'feed/add_post.html', context)
 
 
+# def post_detail(request, pk):
+#     """View a single post and its comments"""
+#     user_post = get_object_or_404(Posts, id=pk)
+#     user_comments = Comments.objects.filter(posts=user_post)
+#     return render(request, 'feed/post_detail.html', context={
+#         "user_post": user_post,
+#         'comments': user_comments
+#     })
+
 def post_detail(request, pk):
-    """View a single post and its comments"""
-    user_post = get_object_or_404(Posts, id=pk)
-    user_comments = Comments.objects.filter(posts=user_post)
+    # Single query with select_related for author, prefetch_related for comments
+    user_post = get_object_or_404(
+        Posts.objects.select_related('author').prefetch_related('comments_set'), 
+        id=pk
+    )
+    
     return render(request, 'feed/post_detail.html', context={
         "user_post": user_post,
-        'comments': user_comments
     })
-
 
 @login_required
 def post_edit(request, pk):
@@ -85,7 +88,7 @@ def post_edit(request, pk):
     
     # Authorisation check
     if post.author != request.user:
-        return redirect('home')  # or raise PermissionDenied
+        raise PermissionDenied("You can't edit someone else's post")  # or raise PermissionDenied
     
     if request.method == 'POST':
         edit = NewPost(request.POST, instance=post)
@@ -106,7 +109,7 @@ def post_delete(request, pk):
     post = get_object_or_404(Posts, id=pk)
     
     if post.author != request.user:
-        return redirect('home')
+        raise PermissionDenied("You can't delete someone else's post")
     
     if request.method == 'POST':
         post.delete()

@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: blogx:13
+    image: postgres:13
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -16,10 +16,18 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
+      - media_volume:/code/media  
     ports:
       - "8000:8000"
     depends_on:
       - db
+    environment:
+      - DB_NAME=blogx
+      - DB_USER=postgres
+      - DB_PASSWORD=post@123
+      - DB_HOST=db
+      - DB_PORT=5432
 
 volumes:
   postgres_data:
+  media_volume:
